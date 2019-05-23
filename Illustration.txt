@@ -1,0 +1,135 @@
+import pandas as pd
+desired_width = 1000
+pd.set_option('display.width', desired_width)
+pd.set_option('display.max_columns', 50)
+import numpy as np
+import xlrd
+import xlsxwriter
+import time
+from datetime import datetime
+from datetime import timedelta
+start_time = time.time()
+rider_rates = pd.read_csv('rider_rates.csv', index_col = 'Code')
+alloc = pd.read_csv('Allocation_Table.csv', index_col='Year')
+
+val_date = pd.to_datetime('01-01-2019')
+
+def main():
+    entry_age = int(input('Enter Participant Entry Age: '))
+    cert_term = int(input('Enter Certificate Term: '))
+    issue_date = pd.to_datetime(input('Enter issue date using format YYYY/MM/DD: '))
+    period_to = pd.to_datetime('01-01-2019')
+    mop = str(input('Enter Mode of Payment (yearly,half-yearly,quarterly or monthly): '))
+    annual_contribution = int(input('Enter Annual Basic Contribution: '))
+    sa_factor = int(input('Enter Sum Assured Factor: '))
+    sex = str('Male')
+    channel = str('Agency')
+    sum_assured = sa_factor * annual_contribution
+    id = str(entry_age)+"-"+str(cert_term)+"-"+sex+"-"+channel
+
+    premium_rate = float(rider_rates.loc[id,'Rate'])
+    print(premium_rate)
+    rider_contribution = 290.47
+    charges_annual = int(1140)
+    ptf_annual = (premium_rate/1000) * sum_assured
+    print(ptf_annual)
+    risk_premium = rider_contribution + ptf_annual
+    indexing = float(0.0)
+    certificate_fee = int(300)
+    maturity_age = entry_age + cert_term
+    prem_paying_term = cert_term
+    no_of_installments = int(5)
+
+
+    prod_num = input("Enter product number: 1) Sukoon "
+                     "2) Sahulat"
+                     "3) Silk Secure"
+                     "4) Sunehra Munafa"
+                     "5) Salamti"
+                     "6) Salary Savings"
+                     "7) Samar"
+                     "8) Silk Education Plan"
+                     "9) Sehal "
+                     "10) Silah"
+                     "11) Sarparast Hadi"
+                     "12) Kafeel"
+                     "13) Sukoon (ND)"
+                     "14) Sukoon (Old)"
+                     "15) Salamti (Old)")
+
+    prod_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+    alloc_dict = {'prod_no' :prod_list,'product':['SUKOON', 'SAHULAT',	'Silk Secure Takaful',	'Sunehra Munafa',	'SALAMTI',	'SALARY SAVINGS',	'SAMAR'	,'Silk Education Plan',	'SEHAL','SILAH'	,'Sarparast Hadi','Kafeel','Sukoon (ND)','Sukoon (Old)','Salamti (Old)']}
+    alloc_dict_df = pd.DataFrame(alloc_dict, index=list(prod_list))
+    # print(alloc_dict_df)
+    prod_alloc = alloc_dict_df.loc[prod_num,'product']
+    # print(prod_alloc)
+
+
+
+
+    PIA_Premium = []
+    Year = []
+    Transaction_Date = []
+    Sum_Assured = []
+    Contribution = []
+    Risk_Amnt = []
+    PIA_Rate = []
+    PIA_Amount = []
+    Wakala_Rate = []
+    Wakala_Amount = []
+    Net_PTF_Amount = []
+
+
+
+    for x in range(1,cert_term+1):
+        prod_table_alloc = alloc.loc[x, prod_alloc]
+        # print(prod_table_alloc)
+        wakala = 1 - float(prod_table_alloc)
+
+        premium = annual_contribution
+        year = x
+        trans_date = issue_date
+        sa = sum_assured
+        cont = annual_contribution
+        r_a = risk_premium
+        rate1 = prod_table_alloc
+        pia_amount = (cont-r_a)*rate1
+        wakala_rate= wakala
+        wakala_amount = annual_contribution*wakala_rate
+        net_ptf = r_a*wakala_rate
+
+
+        PIA_Premium.append(annual_contribution)
+        Year.append(year),
+        Transaction_Date.append(trans_date)
+        Sum_Assured.append(sa)
+        Contribution.append(cont)
+        Risk_Amnt.append(r_a)
+        PIA_Rate.append(rate1)
+        PIA_Amount.append(pia_amount)
+        Wakala_Rate.append(wakala_rate)
+        Wakala_Amount.append(wakala_amount)
+        Net_PTF_Amount.append(net_ptf)
+
+        issue_date = issue_date + timedelta(days=365.25)
+
+    data=pd.DataFrame([
+    (PIA_Premium),
+    (Year),
+    (Transaction_Date),
+    (Sum_Assured),
+    (Contribution),
+    (Risk_Amnt),
+    (PIA_Rate),
+    (PIA_Amount),
+    (Wakala_Rate),
+    (Wakala_Amount),
+    (Net_PTF_Amount)])
+    data1 = pd.DataFrame(data.T)
+    data1.columns = ['PIA Premium','Year','Transaction Date','Sum Assured','Contribution','Risk Amount','PIA Rate','PIA Amount','Wakala Rate','Wakala Amount','Net PTF Amount']
+    print(' ')
+    print('Your Product is ',prod_alloc)
+    print(' ')
+    print(data1)
+
+main()
