@@ -44,7 +44,7 @@ def main():
     prod_num = input("Enter product number:"
 
     prod_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
-    alloc_dict = {'prod_no' :prod_list,'product':[ProdA', 'ProdB',	'ProdC','ProdD','ProdE','ProdF','ProdG'	,'ProdH','ProdI','ProdJ'	,'ProdK','ProdL','ProdM','ProdN','ProdO']}
+    alloc_dict = {'prod_no' :prod_list,'product':    ['ProdA','ProdB','ProdC','ProdD','ProdE','ProdF','ProdG','ProdH','ProdI','ProdJ','ProdK','ProdL','ProdM','ProdN','ProdO']}
     alloc_dict_df = pd.DataFrame(alloc_dict, index=list(prod_list))
     # print(alloc_dict_df)
     prod_alloc = alloc_dict_df.loc[prod_num,'product']
