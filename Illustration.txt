@@ -41,24 +41,10 @@ def main():
     no_of_installments = int(5)
 
 
-    prod_num = input("Enter product number: 1) Sukoon "
-                     "2) Sahulat"
-                     "3) Silk Secure"
-                     "4) Sunehra Munafa"
-                     "5) Salamti"
-                     "6) Salary Savings"
-                     "7) Samar"
-                     "8) Silk Education Plan"
-                     "9) Sehal "
-                     "10) Silah"
-                     "11) Sarparast Hadi"
-                     "12) Kafeel"
-                     "13) Sukoon (ND)"
-                     "14) Sukoon (Old)"
-                     "15) Salamti (Old)")
+    prod_num = input("Enter product number:"
 
     prod_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
-    alloc_dict = {'prod_no' :prod_list,'product':['SUKOON', 'SAHULAT',	'Silk Secure Takaful',	'Sunehra Munafa',	'SALAMTI',	'SALARY SAVINGS',	'SAMAR'	,'Silk Education Plan',	'SEHAL','SILAH'	,'Sarparast Hadi','Kafeel','Sukoon (ND)','Sukoon (Old)','Salamti (Old)']}
+    alloc_dict = {'prod_no' :prod_list,'product':[ProdA', 'ProdB',	'ProdC','ProdD','ProdE','ProdF','ProdG'	,'ProdH','ProdI','ProdJ'	,'ProdK','ProdL','ProdM','ProdN','ProdO']}
     alloc_dict_df = pd.DataFrame(alloc_dict, index=list(prod_list))
     # print(alloc_dict_df)
     prod_alloc = alloc_dict_df.loc[prod_num,'product']
